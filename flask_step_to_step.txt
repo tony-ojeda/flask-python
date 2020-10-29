@@ -27,8 +27,11 @@ touch main.py
 #def hello():
 #    return 'Hello world flask'
 
+<<<<<<< HEAD
 # levantamos nuestra aplicación
 flask run
 
 # para debuguear
 export FLASK_DEBUG=1 && echo $FLASK_DEBUG
+=======
+>>>>>>> 29d8af6bdea5889828d923a92bed8526b6d54885

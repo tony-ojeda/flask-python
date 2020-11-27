@@ -1,11 +1,11 @@
 from flask import Flask, request, make_response, redirect, render_template, session, url_for, flash
 import unittest
+
 from app import create_app
 from app.forms import LoginForm
+from app.firestore_service import  get_users, get_todos
 
 app = create_app()
-
-todos = ['Comprar cafe', 'Enviar solicitud de compra', 'Entregar video al productor']
 
 @app.cli.command()
 def test():
@@ -22,35 +22,30 @@ def internalr_server_error(error):
 
 @app.route('/')
 def index():
-    user_ip = request.remote_addr
+    user_id = request.remote_addr
 
     response = make_response(redirect('/hello'))
-    # response.set_cookie('user_ip', user_ip)
-    session['user_ip'] = user_ip
+    # response.set_cookie('user_id', user_id)
+    session['user_id'] = user_id
 
     return response
 
-@app.route('/hello',methods=['GET', 'POST'])
+@app.route('/hello',methods=['GET'])
 def hello():
-    # user_ip = request.cookies.get('user_ip')
-    user_ip = session.get('user_ip');
-    login_form = LoginForm()
+    # user_id = request.cookies.get('user_id')
+    user_id = session.get('user_id');
     username = session.get('username')
 
     context = {
-        'user_ip':user_ip,
-        'todos':todos,
-        'login_form': login_form,
+        'user_id':user_id,
+        'todos':get_todos(user_id=username),
         'username': username
     }
-    
-    if login_form.validate_on_submit():
-        username = login_form.username.data
-        session['username'] = username
-        
-        flash('Nombre de usuario registrado con éxito!')
 
-        return redirect(url_for('index'))
+    users = get_users()
+
+    for user in users:
+        print(user.id)
 
     return render_template('hello.html',**context)
 

@@ -10,7 +10,5 @@ def create_app():
     app.config.from_object(Config)
 
     app.register_blueprint(auth)
+
     return app
-
-
-

@@ -2,7 +2,7 @@ import unittest
 from flask import Flask, request, make_response, redirect, render_template, session, url_for, flash
 from app import create_app
 from app.forms import LoginForm
-from flask_login import login_required
+from flask_login import login_required, current_user
 from app.firestore_service import  get_users, get_todos
 
 app = create_app()
@@ -35,7 +35,7 @@ def index():
 def hello():
     # user_id = request.cookies.get('user_id')
     user_id = session.get('user_id');
-    username = session.get('username')
+    username = current_user.id
 
     context = {
         'user_id':user_id,
